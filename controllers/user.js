@@ -133,7 +133,7 @@ function usuariosPaginados(req,res){
 // MOSTRAR TODOS LOS USUARIOS 
 //================================================
 function usuariosTodos(req,res){
-	User.find({},'name email image role')
+	User.find({},'name email image role services')
 	   .sort([['name', 1]])	
 	   .exec(
 	   		(err, usuarios) => {
@@ -276,6 +276,7 @@ function uploadImage(req,res){
 					}else{
 						//Actualizar nombre en base de datos
 						User.findByIdAndUpdate(userId, {image: nombreArchivo}, (err, userUpdated) => {
+ 	
 							if(!userUpdated){
 								res.status(404).send({message: 'No se ha podido actualizar el usuario'});
 						    }else{
@@ -312,13 +313,17 @@ function uploadImage(req,res){
 
 function getImageFile(req,res){
 	var imageFile = req.params.imageFile;
+	//var path_file = './uploads/users/'+imageFile;
+
 	var path_file = path.resolve(__dirname, `../uploads/imgUser/${ imageFile }`);
+
 	if( fs.existsSync( path_file ) ){
 		res.sendFile(path_file);
 	}else{
 		var pathNoImage = path.resolve( __dirname, '../assets/no-img.jpg');
 		res.sendFile(pathNoImage);
 	}
+
 }
 
 //================================================

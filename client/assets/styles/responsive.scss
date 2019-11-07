@@ -129,4 +129,13 @@ File: scss
             margin: 40px 0 !important;
         }
     }
+	.float-sm-left {
+		float: left;
+	}
+}
+
+@media print {
+  html .page-wrapper{
+    height: 100%;
+  }
 }

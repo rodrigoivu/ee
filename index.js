@@ -1,6 +1,5 @@
 'use strict'
 
-//app: archivo contiene funcionalidades de Express,para el armado de la infraestructura de la API
 var app = require('./app');
 var socket = require('socket.io');
 //Puerto para servir la API
@@ -10,15 +9,16 @@ var port = process.env.PORT || 3781;
 var broker = require('./broker');
 
 //Funciones para Publicar y Subscribir mediante mqtt
+
 var SubscriberController = require('./controllers/subscriber');
-var PublisherController = require('./controllers/publisher');
+var PublisherController  = require('./controllers/publisher');
 
 
 //mongoose: comandos para manejo de mongodb
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 //Conectar a la base de datos mongodb
-mongoose.connect('mongodb://localhost:27017/eecloud',{ useCreateIndex: true, useNewUrlParser: true },(err,res) => {  //useNewUrlParser agregado por el error de depreciacion
+mongoose.connect('mongodb://localhost:27017/aulatestcloud',{ useCreateIndex: true, useNewUrlParser: true },(err,res) => {  //useNewUrlParser agregado por el error de depreciacion
 if (err) {
 	throw err;
 }else{
@@ -26,19 +26,18 @@ if (err) {
   
 	//Conectar el Servidor de Api's mediante http
 	const server = app.listen(port, function(){
-    	console.log("Servidor de Api's de ee cloud escuchando en http://localhost:" + port);
-    	//Consultar o crear estados de inicio
+	    console.log("Servidor de Api's de AulaTest cloud escuchando en http://localhost:" + port);
+	    //Config inical
+
 	});
 
 	const io = socket.listen(server,{
 					path: '/evento/socket.io'
 				});
-
-	io.sockets.on('connection', (socket) => {
-
+	
+	io.sockets.on('connection', (socket) => { 
 		SubscriberController.asignarSocket(socket,io);
-        PublisherController.recibeOrden(socket);
-
+		PublisherController.recibeOrden(socket);
 	});
 }
 });

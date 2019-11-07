@@ -2,7 +2,7 @@
 
  var jwt = require ('jsonwebtoken');
  var moment = require('moment');
- var secret = 'clave_secreta_ee_cloud';
+ var secret = 'clave_secreta_iofish_cloud';
 
 //================================================
 // Verificar token
@@ -28,7 +28,7 @@
 
  exports.ensureAdmin = function(req, res, next){
  	var usuario = req.user;
- 	if (  usuario.role === 'ADMIN_ROLE' ){
+ 	if ( usuario.role === 'ADMIN_ROLE' ){
  		next();
  		return;
  	} else {
@@ -60,6 +60,7 @@
  exports.ensureAdminUser = function(req, res, next){
 
  	var usuario = req.user; // viene del decode del token
+ 	
  	if ( usuario.role === 'ADMIN_ROLE' || usuario.role === 'USER_ROLE'  ){
  		next();
  		return;
@@ -68,17 +69,3 @@
  	}
  }
 
- //================================================
-// Verificar ADMIN DESIMAT AVANZADO BASICO
-//================================================
-
- exports.ensureAdminUserBasico = function(req, res, next){
-
-   var usuario = req.user; // viene del decode del token
-   if ( usuario.role === 'ADMIN_ROLE' || usuario.role === 'USER_ROLE' ){
-     next();
-     return;
-   } else {
-      return res.status(404).send({message:'Token no válido - No está autorizado' });
-   }
- }

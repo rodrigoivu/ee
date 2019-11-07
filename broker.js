@@ -6,5 +6,5 @@ var settings = {
 var server = new mosca.Server(settings);
 
 server.on('ready', function(){
-console.log("El servidor Mosca esta funcionando correctamente...");
+console.log("El servidor MQTT Mosca esta funcionando correctamente...");
 });

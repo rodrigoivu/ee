@@ -1,28 +1,37 @@
 var mqtt = require('mqtt');
-//var client  = mqtt.connect('mqtt://192.168.0.4');
+//var client  = mqtt.connect('mqtt://192.168.0.2') //IP MAC
 var client  = mqtt.connect('mqtt://68.183.169.115')
-
-var dataMqtt;
+var dataONOff;
+var dataRPM;
 
 client.on('connect', function () {
-    
-	enviarMqtt();
-	
+	enviarOnOff();
+	enviarRPM();
  });
 
-function enviarMqtt(){
-	client.publish('desimat/control', dataMqtt);
+function enviarOnOff(){
+	client.publish('ee/setOnOff', dataONOff);
+}
+
+function enviarRPM(){
+	client.publish('ee/setRPM', dataRPM);
 }
 
 function recibeOrden(socket){
-		socket.on('recibeOrden', (data) => {
-		   dataMqtt=data;	
-           //console.log(data);
-           enviarMqtt();
-        });
+	socket.on('on_off', (data) => {
+	    dataONOff=data;	
+        enviarOnOff();
+    });
+
+    socket.on('rpm', (data) => {
+	    dataRPM=data;	
+        enviarRPM();
+    });
+
 }
 
 module.exports = {
 	recibeOrden,
-	enviarMqtt
+	enviarOnOff,
+	enviarRPM
 };
